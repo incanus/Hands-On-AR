@@ -23,13 +23,10 @@ SUB_THUMB = 45
 SUB_FINGER = 90
 
 try:
-    #create an AF_INET, STREAM socket (TCP)
-    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 except socket.error, msg:
     print 'Failed to create socket. Error code: ' + str(msg[0]) + ' , Error message : ' + msg[1]
     sys.exit();
-
-s.connect(("192.168.1.4", 7777))
 
 while True:
     raws = []
@@ -66,9 +63,9 @@ while True:
     print("")
     
     try:
-        s.sendall(",".join(raws))
+        s.sendto(",".join(raws), ("192.168.1.7", 8080))
     except socket.error:
         print 'Send failed'
         # sys.exit()
     
-    time.sleep(0.25)
+    time.sleep(0.1)
