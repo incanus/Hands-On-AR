@@ -7,6 +7,7 @@ class ViewController: UIViewController {
     @IBOutlet var sceneView: SCNView!
 
     var lastFingerRotationX: [CGFloat] = [0, 0, 0, 0, 0]
+    var lastHandRotation = SCNVector3(0, 0, 0)
 
     func startServer() {
         let server = UDPServer(address: "192.168.1.7", port: 8080)
@@ -24,8 +25,15 @@ class ViewController: UIViewController {
                         fingers.append(0)
                     }
                 }
+
+                var axes = [UInt]()
+                for v in 5...7 {
+                    axes.append(UInt(values[v])!)
+                }
+
                 DispatchQueue.main.sync { [unowned self] in
                     self.setFingers(fingers)
+                    self.setAxes(axes)
                 }
             } while true
         }
@@ -144,6 +152,20 @@ class ViewController: UIViewController {
                 finger.runAction(SCNAction.rotateBy(x: factor, y: 0, z: 0, duration: 0))
                 lastFingerRotationX[f] = factor
             }
+        }
+    }
+
+    func setAxes(_ values: [UInt]) {
+        if let hand = sceneView.scene?.rootNode.childNode(withName: "hand", recursively: true) {
+            hand.runAction(SCNAction.rotateBy(x: CGFloat(-lastHandRotation.x),
+                                              y: CGFloat(-lastHandRotation.y),
+                                              z: CGFloat(-lastHandRotation.z),
+                                              duration: 0))
+            let xFactor = (CGFloat(Float(values[0]) - 180) / 360) * 2 * -.pi
+            let yFactor = (CGFloat(Float(values[1]) - 180) / 360) * 2 * -.pi
+            let zFactor = CGFloat(0)
+            hand.runAction(SCNAction.rotateBy(x: xFactor, y: yFactor, z: zFactor, duration: 0))
+            lastHandRotation = SCNVector3(CGFloat(xFactor), CGFloat(yFactor), CGFloat(zFactor))
         }
     }
 
