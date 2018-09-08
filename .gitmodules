@@ -1,0 +1,3 @@
+[submodule "PiClient/LSM6DS3"]
+	path = PiClient/LSM6DS3
+	url = git@github.com:incanus/LSM6DS3-for-Raspberry-Pi.git
