@@ -15,12 +15,17 @@ class ViewController: UIViewController {
                 let response = server.recv(100)
                 let result = String(data: Data(response.0!), encoding: .utf8)!
                 let values = result.split(separator: ",")
-                var outputs = [UInt]()
-                for v in values {
-                    outputs.append(UInt(v)!)
+
+                var fingers = [UInt]()
+                for v in 0...4 {
+                    if (Int(values[v])! > 0) {
+                        fingers.append(UInt(values[v])!)
+                    } else {
+                        fingers.append(0)
+                    }
                 }
                 DispatchQueue.main.sync { [unowned self] in
-                    self.setFingers(values: outputs)
+                    self.setFingers(fingers)
                 }
             } while true
         }
@@ -131,12 +136,10 @@ class ViewController: UIViewController {
         }
     }
 
-    func setFingers(values: [UInt]) {
+    func setFingers(_ values: [UInt]) {
         for f in 0...4 {
             if let finger = sceneView.scene?.rootNode.childNode(withName: "finger.\(f)", recursively: true) {
-                if lastFingerRotationX[f] != 0 {
-                    finger.runAction(SCNAction.rotateBy(x: CGFloat(-lastFingerRotationX[f]), y: 0, z: 0, duration: 0))
-                }
+                finger.runAction(SCNAction.rotateBy(x: -lastFingerRotationX[f], y: 0, z: 0, duration: 0))
                 let factor = CGFloat(Float(values[f]) / 10 * -.pi * 0.6)
                 finger.runAction(SCNAction.rotateBy(x: factor, y: 0, z: 0, duration: 0))
                 lastFingerRotationX[f] = factor
