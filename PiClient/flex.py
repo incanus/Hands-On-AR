@@ -5,11 +5,16 @@ import Adafruit_MCP3008
 import socket
 import sys
 
+sys.path.append('LSM6DS3')
+from LSM6DS3 import LSM6DS3
+
 CLK  = 18
 MISO = 23
 MOSI = 24
 CS   = 25
 mcp = Adafruit_MCP3008.MCP3008(clk=CLK, cs=CS, miso=MISO, mosi=MOSI)
+
+lsm = LSM6DS3()
 
 VCC = 3.3
 RDIV_THUMB = 47000
@@ -58,6 +63,16 @@ while True:
     print("  " + labels[0] + ratios[0])
     for i in range(4):
         print("  " + labels[i + 1] + ratios[i + 1])
+    
+    print("")
+
+    x = str(int(lsm.getXRotation()))
+    y = str(int(lsm.getYRotation()))
+    z = str(int(lsm.getZRotation()))
+    raws.extend([x, y, z])
+    print("  x:" + x)
+    print("  y:" + y)
+    print("  z:" + z)
     
     print("")
     
