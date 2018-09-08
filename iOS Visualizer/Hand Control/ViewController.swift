@@ -60,12 +60,13 @@ class ViewController: UIViewController {
         palmNode.opacity = 0.5
         handNode.addChildNode(palmNode)
 
+        let ls: [CGFloat] = [0.6, 0.75, 0.65, 0.5]
         let rs: [Float] = [.pi / 6, .pi / 11, -.pi / 11, -.pi / 6, .pi / 3]
         let xs: [Float] = [-0.35, -0.1, 0.1, 0.35, -0.35]
         let ys: [Float] = [0.35, 0.5, 0.5, 0.35, 0]
 
         for f in 1...4 {
-            let finger = SCNCylinder(radius: 0.1, height: 0.75)
+            let finger = SCNCylinder(radius: 0.1, height: ls[f - 1])
             finger.materials = [colorMaterial, darkMaterial, darkMaterial]
 
             let fingerNode = SCNNode(geometry: finger)
