@@ -6,9 +6,9 @@ class ViewController: UIViewController {
 
     @IBOutlet var sceneView: SCNView!
 
-    var hand = Hand()
+    private var hand = Hand()
 
-    func startServer() {
+    private func startServer() {
         let server = UDPServer(address: "192.168.1.7", port: 8080)
         DispatchQueue.global(qos: .background).async { [unowned self] in
             repeat {
@@ -54,23 +54,23 @@ class ViewController: UIViewController {
         sceneView.scene!.rootNode.addChildNode(hand)
     }
 
-    @IBAction func wiggleFingers() {
+    @IBAction private func wiggleFingers() {
         hand.wiggleFingers()
     }
 
-    @IBAction func waveHand() {
+    @IBAction private func waveHand() {
         hand.wave()
     }
 
-    @IBAction func makeFist() {
+    @IBAction private func makeFist() {
         hand.makeFist()
     }
 
-    func setFingers(_ values: [UInt]) {
+    private func setFingers(_ values: [UInt]) {
         hand.setFingers(values)
     }
 
-    func setTilt(_ values: [UInt]) {
+    private func setTilt(_ values: [UInt]) {
         hand.setTilt(values)
     }
 

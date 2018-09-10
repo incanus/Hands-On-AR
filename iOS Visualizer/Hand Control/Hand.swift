@@ -4,7 +4,7 @@ import SceneKit
 class Hand: SCNNode {
 
     private var lastFingerRotationX: [CGFloat] = [0, 0, 0, 0, 0]
-    var lastHandRotation = SCNVector3(0, 0, 0)
+    private var lastHandRotation = SCNVector3(0, 0, 0)
 
     override init() {
         super.init()
