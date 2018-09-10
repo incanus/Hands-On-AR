@@ -4,7 +4,7 @@ import SwiftSocket
 
 class ViewController: UIViewController {
 
-    @IBOutlet var sceneView: SCNView!
+    @IBOutlet private var sceneView: SCNView!
 
     private var server: UDPServer!
     private var hand: Hand!
