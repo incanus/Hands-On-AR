@@ -1,13 +1,14 @@
 import UIKit
+import ARKit
 import SceneKit
 import SwiftSocket
 
-class ViewController: UIViewController {
+class ViewController: UIViewController, ARSCNViewDelegate {
 
-    @IBOutlet private var sceneView: SCNView!
+    @IBOutlet private var sceneView: ARSCNView!
 
     private var server: UDPServer!
-    private var hand: Hand!
+    private var hand: Hand?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -19,13 +20,29 @@ class ViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
-        sceneView.backgroundColor = UIColor.black
-        sceneView.allowsCameraControl = true
+        guard let referenceImages = ARReferenceImage.referenceImages(inGroupNamed: "AR Resources", bundle: nil) else {
+            fatalError("Missing expected asset catalog resources.")
+        }
 
+        let configuration = ARWorldTrackingConfiguration()
+        configuration.detectionImages = referenceImages
+        sceneView.session.run(configuration)
+    }
+
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+
+        sceneView.session.pause()
+    }
+
+    func renderer(_ renderer: SCNSceneRenderer, nodeFor anchor: ARAnchor) -> SCNNode? {
+        let node = SCNNode()
         hand = Hand()
-
-        sceneView.scene = SCNScene()
-        sceneView.scene!.rootNode.addChildNode(hand)
+        hand!.scale = SCNVector3(0.2, 0.2, 0.2)
+        hand!.transform = SCNMatrix4Rotate(hand!.transform, -.pi / 2, 1, 0, 0)
+        hand!.transform = SCNMatrix4Translate(hand!.transform, 0, 0, -0.25)
+        node.addChildNode(hand!)
+        return node
     }
 
     private func setupServerHandling() {
@@ -50,31 +67,31 @@ class ViewController: UIViewController {
                 }
 
                 DispatchQueue.main.sync { [unowned self] in
-                    self.hand.setFingers(fingers)
-                    self.hand.setTilt(axes)
+                    self.hand?.setFingers(fingers)
+                    self.hand?.setTilt(axes)
                 }
             } while true
         }
     }
 
     @IBAction private func wiggleFingers() {
-        hand.wiggleFingers()
+        hand?.wiggleFingers()
     }
 
     @IBAction private func waveHand() {
-        hand.wave()
+        hand?.wave()
     }
 
     @IBAction private func makeFist() {
-        hand.makeFist()
+        hand?.makeFist()
     }
 
     private func setFingers(_ values: [UInt]) {
-        hand.setFingers(values)
+        hand?.setFingers(values)
     }
 
     private func setTilt(_ values: [UInt]) {
-        hand.setTilt(values)
+        hand?.setTilt(values)
     }
 
 }

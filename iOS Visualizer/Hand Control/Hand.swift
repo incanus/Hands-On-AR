@@ -10,6 +10,7 @@ class Hand: SCNNode {
         super.init()
 
         self.name = "hand"
+        self.opacity = 0.75
 
         let colorMaterial = SCNMaterial()
         colorMaterial.diffuse.contents = UIColor.blue
@@ -23,7 +24,6 @@ class Hand: SCNNode {
         palmNode.name = "palm"
         palmNode.position = SCNVector3(0, 0, 0)
         palmNode.transform = SCNMatrix4MakeRotation(.pi / 2, 1, 0, 0)
-        palmNode.opacity = 0.5
         self.addChildNode(palmNode)
 
         let ls: [CGFloat] = [0.6, 0.75, 0.65, 0.5]
@@ -41,7 +41,6 @@ class Hand: SCNNode {
             fingerNode.pivot = SCNMatrix4MakeTranslation(0, -0.5, 0)
             fingerNode.transform = SCNMatrix4MakeRotation(rs[f - 1], 0, 0, 1)
             fingerNode.transform = SCNMatrix4Translate(fingerNode.transform, xs[f - 1], ys[f - 1], 0)
-            fingerNode.opacity = 0.5
             self.addChildNode(fingerNode)
         }
 
@@ -54,7 +53,6 @@ class Hand: SCNNode {
         thumbNode.pivot = SCNMatrix4MakeTranslation(0, -0.5, 0)
         thumbNode.transform = SCNMatrix4MakeRotation(rs[4], 0, 0, 1)
         thumbNode.transform = SCNMatrix4Translate(thumbNode.transform, xs[4], ys[4], 0)
-        thumbNode.opacity = 0.5
         self.addChildNode(thumbNode)
     }
 
