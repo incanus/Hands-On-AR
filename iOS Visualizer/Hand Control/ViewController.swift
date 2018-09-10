@@ -37,12 +37,14 @@ class ViewController: UIViewController, ARSCNViewDelegate {
 
     func renderer(_ renderer: SCNSceneRenderer, nodeFor anchor: ARAnchor) -> SCNNode? {
         let node = SCNNode()
+        node.scale = SCNVector3(0.2, 0.2, 0.2)
+        node.transform = SCNMatrix4Rotate(node.transform, -.pi / 2, 1, 0, 0)
+        node.transform = SCNMatrix4Translate(node.transform, 0, 0, -0.25)
         hand = Hand()
-        hand!.scale = SCNVector3(0.2, 0.2, 0.2)
-        hand!.transform = SCNMatrix4Rotate(hand!.transform, -.pi / 2, 1, 0, 0)
-        hand!.transform = SCNMatrix4Translate(hand!.transform, 0, 0, -0.25)
         node.addChildNode(hand!)
-        return node
+        let wrapper = SCNNode()
+        wrapper.addChildNode(node)
+        return wrapper
     }
 
     private func setupServerHandling() {
