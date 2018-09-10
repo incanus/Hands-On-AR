@@ -6,13 +6,32 @@ class ViewController: UIViewController {
 
     @IBOutlet var sceneView: SCNView!
 
-    private var hand = Hand()
+    private var server: UDPServer!
+    private var hand: Hand!
 
-    private func startServer() {
-        let server = UDPServer(address: "192.168.1.7", port: 8080)
+    override func viewDidLoad() {
+        super.viewDidLoad()
+
+        server = UDPServer(address: "192.168.1.7", port: 8080)
+        setupServerHandling()
+    }
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+
+        sceneView.backgroundColor = UIColor.black
+        sceneView.allowsCameraControl = true
+
+        hand = Hand()
+
+        sceneView.scene = SCNScene()
+        sceneView.scene!.rootNode.addChildNode(hand)
+    }
+
+    private func setupServerHandling() {
         DispatchQueue.global(qos: .background).async { [unowned self] in
             repeat {
-                let response = server.recv(100)
+                let response = self.server.recv(100)
                 let result = String(data: Data(response.0!), encoding: .utf8)!
                 let values = result.split(separator: ",")
 
@@ -36,22 +55,6 @@ class ViewController: UIViewController {
                 }
             } while true
         }
-    }
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-
-        startServer()
-    }
-
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-
-        sceneView.backgroundColor = UIColor.black
-        sceneView.allowsCameraControl = true
-
-        sceneView.scene = SCNScene()
-        sceneView.scene!.rootNode.addChildNode(hand)
     }
 
     @IBAction private func wiggleFingers() {

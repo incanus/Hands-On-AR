@@ -122,5 +122,4 @@ class Hand: SCNNode {
         lastHandRotation = SCNVector3(CGFloat(xFactor), CGFloat(yFactor), CGFloat(zFactor))
     }
 
-
 }
