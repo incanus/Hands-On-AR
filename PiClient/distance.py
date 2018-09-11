@@ -2,6 +2,8 @@
 
 import RPi.GPIO as GPIO
 import time
+import socket
+import sys
  
 GPIO.setmode(GPIO.BCM)
 
@@ -73,9 +75,26 @@ def distance():
 
 if __name__ == '__main__':
     try:
+        s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    except socket.error, msg:
+        print 'Failed to create socket. Error code: ' + str(msg[0]) + ' , Error message : ' + msg[1]
+        sys.exit();
+    
+    try:
         while True:
             (x_distance, y_distance, z_distance) = distance()
-            print("x: %.1f cm y: %.1f cm z: %.1f cm" % (x_distance, y_distance, z_distance))
+            print("x: %.1f cm y: %.1f cm z: %.1f cm" % 
+                  (x_distance, y_distance, z_distance))
+            try:
+                s.sendto("b:" + 
+                         str(int(x_distance)) + "," + 
+                         str(int(y_distance)) + "," + 
+                         str(int(z_distance)), 
+                         ("192.168.1.7", 8080))
+            except socket.error:
+                print 'Send failed'
+                # sys.exit()
+            
             time.sleep(0.1)
     
     except KeyboardInterrupt:
