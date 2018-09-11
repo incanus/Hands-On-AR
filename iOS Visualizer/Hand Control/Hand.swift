@@ -3,8 +3,12 @@ import SceneKit
 
 class Hand: SCNNode {
 
+    private let calibratedPositions = SCNVector3(32, 16, 22)
+    private let maxPosition = 50
+
     private var lastFingerRotationX: [CGFloat] = [0, 0, 0, 0, 0]
     private var lastHandRotation = SCNVector3(0, 0, 0)
+    private var lastPosition = SCNVector3(0, 0, 0)
 
     override init() {
         super.init()
@@ -117,7 +121,22 @@ class Hand: SCNNode {
         let yFactor = (CGFloat(Float(values[1]) - 180) / 360) * 2 * -.pi
         let zFactor = CGFloat(0)
         self.runAction(SCNAction.rotateBy(x: xFactor, y: yFactor, z: zFactor, duration: 0))
-        lastHandRotation = SCNVector3(CGFloat(xFactor), CGFloat(yFactor), CGFloat(zFactor))
+        lastHandRotation = SCNVector3(xFactor, yFactor, zFactor)
+    }
+
+    func setPosition(_ values: [UInt]) {
+        self.runAction(SCNAction.moveBy(x: Int(lastPosition.x) != maxPosition ? CGFloat(-lastPosition.x) : 0,
+                                        y: Int(lastPosition.y) != maxPosition ? CGFloat(-lastPosition.y) : 0,
+                                        z: Int(lastPosition.z) != maxPosition ? CGFloat(-lastPosition.z) : 0,
+                                        duration: 0))
+        let x = Int(calibratedPositions.x) - Int(values[0])
+        let y = Int(calibratedPositions.y) - Int(values[1])
+        let z = Int(calibratedPositions.z) - Int(values[2])
+        let xp = CGFloat((Float(x) / calibratedPositions.x) * -0.5)
+        let yp = CGFloat((Float(y) / calibratedPositions.y) *  0.5)
+        let zp = CGFloat((Float(z) / calibratedPositions.z) * -0.5)
+        self.runAction(SCNAction.moveBy(x: xp, y: yp, z: zp, duration: 0))
+        lastPosition = SCNVector3(xp, yp, zp)
     }
 
 }

@@ -39,7 +39,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         let node = SCNNode()
         node.scale = SCNVector3(0.2, 0.2, 0.2)
         node.transform = SCNMatrix4Rotate(node.transform, -.pi / 2, 1, 0, 0)
-        node.transform = SCNMatrix4Translate(node.transform, 0, 0, -0.25)
+        node.transform = SCNMatrix4Translate(node.transform, 0, 0, -0.6) //-0.25)
         hand = Hand()
         node.addChildNode(hand!)
         let wrapper = SCNNode()
@@ -52,25 +52,40 @@ class ViewController: UIViewController, ARSCNViewDelegate {
             repeat {
                 let response = self.server.recv(100)
                 let result = String(data: Data(response.0!), encoding: .utf8)!
-                let values = result.split(separator: ",")
+                let sections = result.split(separator: ":")
 
-                var fingers = [UInt]()
-                for v in 0...4 {
-                    if (Int(values[v])! > 0) {
-                        fingers.append(UInt(values[v])!)
-                    } else {
-                        fingers.append(0)
+                if sections[0] == "a" {
+                    let values = sections[1].split(separator: ",")
+
+                    var fingers = [UInt]()
+                    for v in 0...4 {
+                        if (Int(values[v])! > 0) {
+                            fingers.append(UInt(values[v])!)
+                        } else {
+                            fingers.append(0)
+                        }
                     }
-                }
 
-                var axes = [UInt]()
-                for v in 5...7 {
-                    axes.append(UInt(values[v])!)
-                }
+                    var axes = [UInt]()
+                    for v in 5...7 {
+                        axes.append(UInt(values[v])!)
+                    }
 
-                DispatchQueue.main.sync { [unowned self] in
-                    self.hand?.setFingers(fingers)
-                    self.hand?.setTilt(axes)
+                    DispatchQueue.main.sync { [unowned self] in
+                        self.hand?.setFingers(fingers)
+                        self.hand?.setTilt(axes)
+                    }
+                } else if sections[0] == "b" {
+                    let values = sections[1].split(separator: ",")
+
+                    var positions = [UInt]()
+                    positions.append(UInt(values[0])!)
+                    positions.append(UInt(values[1])!)
+                    positions.append(UInt(values[2])!)
+
+                    DispatchQueue.main.sync { [unowned self] in
+                        self.hand?.setPosition(positions)
+                    }
                 }
             } while true
         }
