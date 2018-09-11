@@ -4,47 +4,77 @@ import RPi.GPIO as GPIO
 import time
  
 GPIO.setmode(GPIO.BCM)
- 
-GPIO_TRIGGER = 4
-GPIO_ECHO = 5
- 
-GPIO.setup(GPIO_TRIGGER, GPIO.OUT)
-GPIO.setup(GPIO_ECHO, GPIO.IN)
- 
+
+Z_TRIG = 23
+Z_ECHO = 24
+X_TRIG = 22
+X_ECHO = 27
+Y_TRIG = 5
+Y_ECHO = 6
+
+GPIO.setup(Z_TRIG, GPIO.OUT)
+GPIO.setup(X_TRIG, GPIO.OUT)
+GPIO.setup(Y_TRIG, GPIO.OUT)
+GPIO.setup(Z_ECHO, GPIO.IN)
+GPIO.setup(X_ECHO, GPIO.IN)
+GPIO.setup(Y_ECHO, GPIO.IN)
+
 def distance():
-    GPIO.output(GPIO_TRIGGER, True)
- 
-    # set Trigger after 0.01ms to LOW
+    GPIO.output(Z_TRIG, GPIO.HIGH)
     time.sleep(0.00001)
-    GPIO.output(GPIO_TRIGGER, False)
- 
-    StartTime = time.time()
-    StopTime = time.time()
- 
-    while GPIO.input(GPIO_ECHO) == 0:
-        StartTime = time.time()
- 
-    # save time of arrival
-    while GPIO.input(GPIO_ECHO) == 1:
-        StopTime = time.time()
- 
-    # time difference between start and arrival
-    TimeElapsed = StopTime - StartTime
-    # multiply with the sonic speed (34300 cm/s)
-    # and divide by 2, because there and back
-    distance = (TimeElapsed * 34300) / 2
- 
-    return distance
- 
+    GPIO.output(Z_TRIG, GPIO.LOW)
+    
+    z_start = z_stop = time.time()
+    
+    while GPIO.input(Z_ECHO) == 0:
+        z_start = time.time()
+    
+    while GPIO.input(Z_ECHO) == 1:
+        z_stop = time.time()
+    
+    z_elapsed = z_stop - z_start
+    z_distance = min((z_elapsed * 34300) / 2, 40)
+    
+    x_start = x_stop = time.time()
+    
+    GPIO.output(X_TRIG, GPIO.HIGH)
+    time.sleep(0.00001)
+    GPIO.output(X_TRIG, GPIO.LOW)
+
+    while GPIO.input(X_ECHO) == 0:
+        x_start = time.time()
+
+    while GPIO.input(X_ECHO) == 1:
+        x_stop = time.time()
+    
+    x_elapsed = x_stop - x_start
+    x_distance = min((x_elapsed * 34300) / 2, 40)
+    
+    GPIO.output(Y_TRIG, GPIO.HIGH)
+    time.sleep(0.00001)
+    GPIO.output(Y_TRIG, GPIO.LOW)
+    
+    y_start = y_stop = time.time()
+    
+    while GPIO.input(Y_ECHO) == 0:
+        y_start = time.time()
+
+    while GPIO.input(Y_ECHO) == 1:
+        y_stop = time.time()
+    
+    y_elapsed = y_stop - y_start
+    y_distance = min((y_elapsed * 34300) / 2, 40)
+    
+    return (z_distance, x_distance, y_distance)
+
 if __name__ == '__main__':
     try:
         while True:
-            dist = distance()
-            print("Measured Distance = %.1f cm" % dist)
+            (z_distance, x_distance, y_distance) = distance()
+            print("x: %.1f cm y: %.1f cm z: %.1f cm" % (x_distance, y_distance, z_distance))
             # print(("=" * min(int(dist), 80)))
             time.sleep(0.1)
- 
-        # Reset by pressing CTRL + C
+    
     except KeyboardInterrupt:
         print("Measurement stopped by User")
         GPIO.cleanup()
