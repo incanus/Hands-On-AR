@@ -37,9 +37,9 @@ class ViewController: UIViewController, ARSCNViewDelegate {
 
     func renderer(_ renderer: SCNSceneRenderer, nodeFor anchor: ARAnchor) -> SCNNode? {
         let node = SCNNode()
-        node.scale = SCNVector3(0.2, 0.2, 0.2)
+        node.scale = SCNVector3(0.5, 0.5, 0.5)
         node.transform = SCNMatrix4Rotate(node.transform, -.pi / 2, 1, 0, 0)
-        node.transform = SCNMatrix4Translate(node.transform, 0, 0, -0.6) //-0.25)
+        node.transform = SCNMatrix4Translate(node.transform, 0, -1, -1) // y/z swapped
         hand = Hand()
         node.addChildNode(hand!)
         let wrapper = SCNNode()
@@ -78,13 +78,12 @@ class ViewController: UIViewController, ARSCNViewDelegate {
                 } else if sections[0] == "b" {
                     let values = sections[1].split(separator: ",")
 
-                    var positions = [UInt]()
-                    positions.append(UInt(values[0])!)
-                    positions.append(UInt(values[1])!)
-                    positions.append(UInt(values[2])!)
+                    let x = Float(values[0])!
+                    let y = Float(values[1])!
+                    let dropped = (values[2] == "1" ? true : false)
 
                     DispatchQueue.main.sync { [unowned self] in
-                        self.hand?.setPosition(positions)
+                        self.hand?.setPosition(x: x, y: y, dropped: dropped)
                     }
                 }
             } while true
