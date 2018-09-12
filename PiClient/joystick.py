@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 import Adafruit_MCP3008
+import socket
 import math
 import time
 
@@ -14,9 +15,11 @@ CH_K = 2
 X_MIN = 0.0
 X_MID = 1.62
 X_MAX = 3.3
-Y_MIN = 0
+Y_MIN = 0.0
 Y_MID = 1.59
 Y_MAX = 3.3
+K_OFF = 1.65
+K_ON  = 0.0
 
 SCALE = 6
 
@@ -26,6 +29,13 @@ MOSI = 24
 CS   = 25
 
 mcp = Adafruit_MCP3008.MCP3008(clk=CLK, cs=CS, miso=MISO, mosi=MOSI)
+
+try:
+    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+except socket.error, msg:
+    print 'Failed to create socket. Error code: ' + str(msg[0]) + ' , Error message : ' + msg[1]
+    sys.exit();
+    
 
 while True:
     xADC = mcp.read_adc(CH_X)
@@ -50,7 +60,20 @@ while True:
     
     kADC = mcp.read_adc(CH_K)
     k = (kADC * VCC) / 1023
-    if k == 0:
-        print("==========")
+    if k == K_ON:
+        kp = 1
+    else:
+        kp = 0
+    print("k: " + str(kp))
+    
+    try:
+        s.sendto("b:" + 
+                 str(xp) + "," + 
+                 str(yp) + "," + 
+                 str(kp),
+                 ("192.168.1.7", 8080))
+    except socket.error:
+        print 'Send failed'
+        # sys.exit()
     
     time.sleep(0.1)
