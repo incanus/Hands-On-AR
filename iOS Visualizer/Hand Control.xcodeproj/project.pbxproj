@@ -14,6 +14,7 @@
 		DDA8C9B5213768290095CEC7 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DDA8C9B4213768290095CEC7 /* Assets.xcassets */; };
 		DDA8C9B8213768290095CEC7 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DDA8C9B6213768290095CEC7 /* LaunchScreen.storyboard */; };
 		DDCFAC782146FF1C00E26D3B /* Hand.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDCFAC772146FF1C00E26D3B /* Hand.swift */; };
+		DDCFAC7E214AE02000E26D3B /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDCFAC7D214AE02000E26D3B /* Extensions.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -28,6 +29,7 @@
 		DDA8C9B7213768290095CEC7 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		DDA8C9B92137682A0095CEC7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		DDCFAC772146FF1C00E26D3B /* Hand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Hand.swift; sourceTree = "<group>"; };
+		DDCFAC7D214AE02000E26D3B /* Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -83,6 +85,7 @@
 				DDA8C9AD213768270095CEC7 /* AppDelegate.swift */,
 				DDA8C9AF213768270095CEC7 /* ViewController.swift */,
 				DDCFAC772146FF1C00E26D3B /* Hand.swift */,
+				DDCFAC7D214AE02000E26D3B /* Extensions.swift */,
 				DDA8C9B1213768270095CEC7 /* Main.storyboard */,
 				DDA8C9B4213768290095CEC7 /* Assets.xcassets */,
 				DDA8C9B6213768290095CEC7 /* LaunchScreen.storyboard */,
@@ -214,6 +217,7 @@
 				DDA8C9B0213768270095CEC7 /* ViewController.swift in Sources */,
 				DDA8C9AE213768270095CEC7 /* AppDelegate.swift in Sources */,
 				DDCFAC782146FF1C00E26D3B /* Hand.swift in Sources */,
+				DDCFAC7E214AE02000E26D3B /* Extensions.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

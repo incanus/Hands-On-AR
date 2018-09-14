@@ -5,7 +5,40 @@
   },
   "resources" : [
     {
-      "filename" : "qr.arreferenceimage"
+      "filename" : "ball-qr.arreferenceimage"
+    },
+    {
+      "filename" : "ball.arreferenceimage"
+    },
+    {
+      "filename" : "box-qr.arreferenceimage"
+    },
+    {
+      "filename" : "box.arreferenceimage"
+    },
+    {
+      "filename" : "cone-qr.arreferenceimage"
+    },
+    {
+      "filename" : "cone.arreferenceimage"
+    },
+    {
+      "filename" : "donut-qr.arreferenceimage"
+    },
+    {
+      "filename" : "donut.arreferenceimage"
+    },
+    {
+      "filename" : "hand-qr.arreferenceimage"
+    },
+    {
+      "filename" : "hand.arreferenceimage"
+    },
+    {
+      "filename" : "pyramid-qr.arreferenceimage"
+    },
+    {
+      "filename" : "pyramid.arreferenceimage"
     }
   ]
 }

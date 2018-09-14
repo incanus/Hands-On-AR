@@ -24,8 +24,8 @@ class ViewController: UIViewController, ARSCNViewDelegate {
             fatalError("Missing expected asset catalog resources.")
         }
 
-        let configuration = ARWorldTrackingConfiguration()
-        configuration.detectionImages = referenceImages
+        let configuration = ARImageTrackingConfiguration()
+        configuration.trackingImages = referenceImages
         sceneView.session.run(configuration)
     }
 
@@ -36,15 +36,45 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     }
 
     func renderer(_ renderer: SCNSceneRenderer, nodeFor anchor: ARAnchor) -> SCNNode? {
-        let node = SCNNode()
-        node.scale = SCNVector3(0.5, 0.5, 0.5)
-        node.transform = SCNMatrix4Rotate(node.transform, -.pi / 2, 1, 0, 0)
-        node.transform = SCNMatrix4Translate(node.transform, 0, -1, -1) // y/z swapped
-        hand = Hand()
-        node.addChildNode(hand!)
-        let wrapper = SCNNode()
-        wrapper.addChildNode(node)
-        return wrapper
+        if let anchor = anchor as? ARImageAnchor {
+            if (anchor.referenceImage.name?.starts(with: "hand"))! {
+                let node = SCNNode()
+                node.scale = SCNVector3(0.5, 0.5, 0.5)
+                node.transform = SCNMatrix4Rotate(node.transform, -.pi / 2, 1, 0, 0)
+                node.transform = SCNMatrix4Translate(node.transform, 0, -1, -1) // y/z swapped
+                hand = Hand()
+                node.addChildNode(hand!)
+                let wrapper = SCNNode()
+                wrapper.addChildNode(node)
+                return wrapper
+            } else {
+                var geometry: SCNGeometry?
+                switch anchor.referenceImage.name {
+                case "ball", "ball-qr":
+                    geometry = SCNSphere(radius: 2❞)
+                    geometry?.firstMaterial?.diffuse.contents = UIImage(named: "red_tile")
+                case "box", "box-qr":
+                    geometry = SCNBox(width: 4❞, height: 4❞, length: 4❞, chamferRadius: 0)
+                    geometry?.firstMaterial?.diffuse.contents = UIImage(named: "cyan_tile")
+                case "cone", "cone-qr":
+                    geometry = SCNCone(topRadius: 0.1❞, bottomRadius: 2❞, height: 4❞)
+                    geometry?.firstMaterial?.diffuse.contents = UIImage(named: "green_tile")
+                case "donut", "donut-qr":
+                    geometry = SCNTorus(ringRadius: 2❞, pipeRadius: 1❞)
+                    geometry?.firstMaterial?.diffuse.contents = UIImage(named: "yellow_tile")
+                case "pyramid", "pyramid-qr":
+                    geometry = SCNPyramid(width: 4❞, height: 4❞, length: 4❞)
+                    geometry?.firstMaterial?.diffuse.contents = UIImage(named: "brown_tile")
+                default:
+                    return nil
+                }
+                if let validGeometry = geometry {
+                    let node = SCNNode(geometry: validGeometry)
+                    return node
+                }
+            }
+        }
+        return nil
     }
 
     private func setupServerHandling() {
