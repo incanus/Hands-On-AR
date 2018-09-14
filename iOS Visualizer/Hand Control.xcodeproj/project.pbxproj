@@ -20,7 +20,7 @@
 		128216B2CFE2D864973A1C03 /* Pods_Hand_Control.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Hand_Control.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C8BEBE2C15CF55301DA55FE2 /* Pods-Hand Control.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Hand Control.release.xcconfig"; path = "Pods/Target Support Files/Pods-Hand Control/Pods-Hand Control.release.xcconfig"; sourceTree = "<group>"; };
 		D2461FAB505AF73FC61912E0 /* Pods-Hand Control.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Hand Control.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Hand Control/Pods-Hand Control.debug.xcconfig"; sourceTree = "<group>"; };
-		DDA8C9AA213768260095CEC7 /* Hand Control.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Hand Control.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		DDA8C9AA213768260095CEC7 /* Hands-On AR.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Hands-On AR.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		DDA8C9AD213768270095CEC7 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		DDA8C9AF213768270095CEC7 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		DDA8C9B2213768270095CEC7 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -72,7 +72,7 @@
 		DDA8C9AB213768260095CEC7 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				DDA8C9AA213768260095CEC7 /* Hand Control.app */,
+				DDA8C9AA213768260095CEC7 /* Hands-On AR.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -110,7 +110,7 @@
 			);
 			name = "Hand Control";
 			productName = "Hand Control";
-			productReference = DDA8C9AA213768260095CEC7 /* Hand Control.app */;
+			productReference = DDA8C9AA213768260095CEC7 /* Hands-On AR.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -368,7 +368,7 @@
 					"@executable_path/Frameworks",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "io.justinmiller.Hand-Control";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = "Hands-On AR";
 				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -387,7 +387,7 @@
 					"@executable_path/Frameworks",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "io.justinmiller.Hand-Control";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = "Hands-On AR";
 				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
