@@ -71,7 +71,7 @@ while True:
                  str(xp) + "," + 
                  str(yp) + "," + 
                  str(kp),
-                 ("192.168.1.7", 8080))
+                 ("10.1.0.4", 8080))
     except socket.error:
         print 'Send failed'
         # sys.exit()
