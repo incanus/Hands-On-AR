@@ -24,6 +24,21 @@ STRAIGHT_FINGER = 101100
 BEND_THUMB = 98000
 BEND_FINGER = 250000
 
+CH_X = 5
+CH_Y = 6
+CH_K = 7
+
+X_MIN = 0.0
+X_MID = 1.62
+X_MAX = 3.3
+Y_MIN = 0.0
+Y_MID = 1.59
+Y_MAX = 3.3
+K_OFF = 1.65
+K_ON  = 0.0
+
+SCALE = 6
+
 try:
     s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 except socket.error, msg:
@@ -35,6 +50,7 @@ while True:
     ratios = []
     labels = ["thumb ", "index ", "middle", "ring  ", "pinky "]
     
+    # fingers
     thumbADC = mcp.read_adc(0)
     thumbV = thumbADC * VCC / 1023
     thumbR = RDIV_THUMB * (VCC / max(thumbV - 1, 0.001))
@@ -66,18 +82,52 @@ while True:
     
     print("")
     
-    x = str(int(lsm.getXRotation()))
-    y = str(int(lsm.getYRotation()))
-    z = str(int(lsm.getZRotation()))
-    raws.extend([x, y, z])
-    print("  x:" + x)
-    print("  y:" + y)
-    print("  z:" + z)
+    # gyro
+    xRot = str(int(lsm.getXRotation()))
+    yRot = str(int(lsm.getYRotation()))
+    zRot = str(int(lsm.getZRotation()))
+    raws.extend([xRot, yRot, zRot])
+    print("  x:" + xRot)
+    print("  y:" + yRot)
+    print("  z:" + zRot)
+    
+    print("")
+    
+    # joystick
+    xADC = mcp.read_adc(CH_X)
+    x = round((xADC * VCC) / 1023, 2)
+    if x < X_MID:
+        xp = (X_MID - x) / -X_MID
+    elif x == X_MID:
+        xp = 0
+    else:
+        xp = min((x - X_MID) / X_MID, 1)
+    print("  x pos: " + str(xp))
+    
+    yADC = mcp.read_adc(CH_Y)
+    y = round((yADC * VCC) / 1023, 2)
+    if y < Y_MID:
+        yp = (Y_MID - y) / -Y_MID
+    elif y == Y_MID:
+        yp = 0
+    else:
+        yp = min((y - Y_MID) / Y_MID, 1)
+    print("  y pos: " + str(yp))
+    
+    kADC = mcp.read_adc(CH_K)
+    k = (kADC * VCC) / 1023
+    if k == K_ON:
+        kp = 1
+    else:
+        kp = 0
+    print("  k pos: " + str(kp))
+    
+    raws.extend([str(xp), str(yp), str(kp)])
     
     print("")
     
     try:
-        s.sendto("a:" + ",".join(raws), ("10.0.1.4", 8080))
+        s.sendto(",".join(raws), ("10.0.1.4", 8080))
     except socket.error:
         print 'Send failed'
         # sys.exit()
