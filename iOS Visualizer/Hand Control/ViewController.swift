@@ -59,12 +59,12 @@ class ViewController: UIViewController, ARSCNViewDelegate, SCNPhysicsContactDele
             } else {
                 var geometry: SCNGeometry?
                 switch anchor.referenceImage.name {
-                case "ball", "ball-qr":
-                    geometry = SCNSphere(radius: 2❞)
-                    geometry?.firstMaterial?.diffuse.contents = UIImage(named: "red_tile")
-                case "box", "box-qr":
-                    geometry = SCNBox(width: 4❞, height: 4❞, length: 4❞, chamferRadius: 0)
-                    geometry?.firstMaterial?.diffuse.contents = UIImage(named: "cyan_tile")
+//                case "ball", "ball-qr":
+//                    geometry = SCNSphere(radius: 2❞)
+//                    geometry?.firstMaterial?.diffuse.contents = UIImage(named: "red_tile")
+//                case "box", "box-qr":
+//                    geometry = SCNBox(width: 4❞, height: 4❞, length: 4❞, chamferRadius: 0)
+//                    geometry?.firstMaterial?.diffuse.contents = UIImage(named: "cyan_tile")
                 case "cone", "cone-qr":
                     geometry = SCNCone(topRadius: 0.1❞, bottomRadius: 2❞, height: 4❞)
                     geometry?.firstMaterial?.diffuse.contents = UIImage(named: "green_tile")
