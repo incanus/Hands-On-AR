@@ -13,7 +13,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        server = UDPServer(address: "192.168.1.7", port: 8080)
+        server = UDPServer(address: "10.0.1.4", port: 8080)
         setupServerHandling()
     }
 
