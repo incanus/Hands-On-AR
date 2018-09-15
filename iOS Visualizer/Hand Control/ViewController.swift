@@ -2,13 +2,15 @@ import UIKit
 import ARKit
 import SceneKit
 import SwiftSocket
+import AVFoundation
 
-class ViewController: UIViewController, ARSCNViewDelegate {
+class ViewController: UIViewController, ARSCNViewDelegate, SCNPhysicsContactDelegate {
 
     @IBOutlet private var sceneView: ARSCNView!
 
     private var server: UDPServer!
     private var hand: Hand?
+    private var player: AVPlayer?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -28,6 +30,8 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         configuration.maximumNumberOfTrackedImages = 6
         configuration.trackingImages = referenceImages
         sceneView.session.run(configuration)
+
+        sceneView.scene.physicsWorld.contactDelegate = self
     }
 
     override func viewWillDisappear(_ animated: Bool) {
@@ -45,6 +49,10 @@ class ViewController: UIViewController, ARSCNViewDelegate {
                 node.transform = SCNMatrix4Translate(node.transform, 0, -1, -1) // y/z swapped
                 hand = Hand()
                 node.addChildNode(hand!)
+                hand!.physicsBody = SCNPhysicsBody(type: .static, shape: SCNPhysicsShape(geometry: hand!.childNode(withName: "palm", recursively: true)!.geometry!, options: [SCNPhysicsShape.Option.keepAsCompound: 0]))
+                hand!.physicsBody!.isAffectedByGravity = false
+                hand!.physicsBody!.categoryBitMask = 1
+                hand!.physicsBody!.contactTestBitMask = 1
                 let wrapper = SCNNode()
                 wrapper.addChildNode(node)
                 return wrapper
@@ -71,6 +79,10 @@ class ViewController: UIViewController, ARSCNViewDelegate {
                 }
                 if let validGeometry = geometry {
                     let node = SCNNode(geometry: validGeometry)
+                    node.physicsBody = SCNPhysicsBody(type: .static, shape: SCNPhysicsShape(geometry: validGeometry, options: [SCNPhysicsShape.Option.type: SCNPhysicsShape.ShapeType.boundingBox]))
+                    node.physicsBody!.isAffectedByGravity = false
+                    node.physicsBody!.categoryBitMask = 1
+                    node.physicsBody!.contactTestBitMask = 1
                     return node
                 }
             }
@@ -78,6 +90,22 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         return nil
     }
 
+    func physicsWorld(_ world: SCNPhysicsWorld, didBegin contact: SCNPhysicsContact) {
+        print("BEGIN: \(contact)")
+        if sceneView.debugOptions != [] {
+            player = AVPlayer(playerItem: AVPlayerItem(url: Bundle.main.url(forResource: "on", withExtension: "wav")!))
+            player?.play()
+        }
+    }
+
+    func physicsWorld(_ world: SCNPhysicsWorld, didEnd contact: SCNPhysicsContact) {
+        print("END: \(contact)")
+        if sceneView.debugOptions != [] {
+            player = AVPlayer(playerItem: AVPlayerItem(url: Bundle.main.url(forResource: "off", withExtension: "wav")!))
+            player?.play()
+        }
+   }
+    
     private func setupServerHandling() {
         DispatchQueue.global(qos: .background).async { [unowned self] in
             repeat {
@@ -125,6 +153,14 @@ class ViewController: UIViewController, ARSCNViewDelegate {
 
     @IBAction private func makeFist() {
         hand?.makeFist()
+    }
+
+    @IBAction private func togglePhysicsDebug() {
+        if sceneView.debugOptions == [] {
+            sceneView.debugOptions = [.showPhysicsShapes, .renderAsWireframe]
+        } else {
+            sceneView.debugOptions = []
+        }
     }
 
 }
