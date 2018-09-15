@@ -70,10 +70,10 @@ class ViewController: UIViewController, ARSCNViewDelegate, SCNPhysicsContactDele
                     geometry?.firstMaterial?.diffuse.contents = UIImage(named: "green_tile")
                 case "donut", "donut-qr":
                     geometry = SCNTorus(ringRadius: 2❞, pipeRadius: 1❞)
-                    geometry?.firstMaterial?.diffuse.contents = UIImage(named: "yellow_tile")
+                    geometry?.firstMaterial?.diffuse.contents = UIImage(named: "brown_tile")
                 case "pyramid", "pyramid-qr":
                     geometry = SCNPyramid(width: 4❞, height: 4❞, length: 4❞)
-                    geometry?.firstMaterial?.diffuse.contents = UIImage(named: "brown_tile")
+                    geometry?.firstMaterial?.diffuse.contents = UIImage(named: "yellow_tile")
                 default:
                     return nil
                 }
