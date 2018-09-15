@@ -127,12 +127,4 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         hand?.makeFist()
     }
 
-    private func setFingers(_ values: [UInt]) {
-        hand?.setFingers(values)
-    }
-
-    private func setTilt(_ values: [UInt]) {
-        hand?.setTilt(values)
-    }
-
 }
