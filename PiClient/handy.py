@@ -77,7 +77,7 @@ while True:
     print("")
     
     try:
-        s.sendto("a:" + ",".join(raws), ("10.1.0.4", 8080))
+        s.sendto("a:" + ",".join(raws), ("10.0.1.4", 8080))
     except socket.error:
         print 'Send failed'
         # sys.exit()
