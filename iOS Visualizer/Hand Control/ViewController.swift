@@ -25,6 +25,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         }
 
         let configuration = ARImageTrackingConfiguration()
+        configuration.maximumNumberOfTrackedImages = 6
         configuration.trackingImages = referenceImages
         sceneView.session.run(configuration)
     }
