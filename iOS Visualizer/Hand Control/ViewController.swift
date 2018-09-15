@@ -82,11 +82,10 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         DispatchQueue.global(qos: .background).async { [unowned self] in
             repeat {
                 let response = self.server.recv(100)
-                let result = String(data: Data(response.0!), encoding: .utf8)!
-                let sections = result.split(separator: ":")
+                if let data = response.0 {
+                    let result = String(data: Data(data), encoding: .utf8)!
 
-                if sections[0] == "a" {
-                    let values = sections[1].split(separator: ",")
+                    let values = result.split(separator: ",")
 
                     var fingers = [UInt]()
                     for v in 0...4 {
@@ -102,18 +101,13 @@ class ViewController: UIViewController, ARSCNViewDelegate {
                         axes.append(UInt(values[v])!)
                     }
 
+                    let x = Float(values[8])!
+                    let y = Float(values[9])!
+                    let dropped = (values[10] == "1" ? true : false)
+
                     DispatchQueue.main.sync { [unowned self] in
                         self.hand?.setFingers(fingers)
                         self.hand?.setTilt(axes)
-                    }
-                } else if sections[0] == "b" {
-                    let values = sections[1].split(separator: ",")
-
-                    let x = Float(values[0])!
-                    let y = Float(values[1])!
-                    let dropped = (values[2] == "1" ? true : false)
-
-                    DispatchQueue.main.sync { [unowned self] in
                         self.hand?.setPosition(x: x, y: y, dropped: dropped)
                     }
                 }
